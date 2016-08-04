@@ -1,6 +1,6 @@
-module Main where
+module Screen (streamScreen) where
 
-
+import           Control.Concurrent
 import           Control.Monad
 import           Data.Bits
 import qualified Data.ByteString              as BS
@@ -61,18 +61,22 @@ reshape size = do
 keyboardMouse :: KeyboardMouseCallback
 keyboardMouse _key _state _modifiers _position = return ()
 
-main :: IO ()
-main = do
+streamScreen :: MVar BS.ByteString -> IO ()
+streamScreen screenVar = do
   (_progName, _args) <- getArgsAndInitialize
-  _window <- createWindow "zxemu"
 
-  -- src <- BS.readFile "data/R-Type.scr"
-  src <- BS.readFile "data/DanDare-PilotOfTheFuture.scr"
+  _window <- createWindow "zxemu"
 
   clearColor $= Color4 0 0 0 0
 
   windowSize $= Size (256 * 2) (192 * 2)
-  displayCallback $= display src
+
+  forkIO $ do
+    screen <- takeMVar screenVar
+    displayCallback $= display screen
+
   reshapeCallback $= Just reshape
+
   keyboardMouseCallback $= Just keyboardMouse
+
   mainLoop
