@@ -1,3 +1,3 @@
 # zxemu
 
-![](https://dl.dropboxusercontent.com/u/3735337/github/screenshot.png)
+![](https://github.com/oshyshko/zxemu/blob/master/data/DanDare-PilotOfTheFuture.gif?raw=true)
